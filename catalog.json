@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-05T22:56:42+08:00",
+  "updatedAt": "2026-11-05T22:59:36+08:00",
   "categories": [
     {
       "id": "未分类",
@@ -8,6 +8,10 @@
     {
       "id": "人物加结果",
       "name": "人物加结果"
+    },
+    {
+      "id": "教程类",
+      "name": "教程类"
     }
   ],
   "covers": [
@@ -34,7 +38,7 @@
     {
       "id": "c003",
       "title": "Vibecoding零基础做简历和个人网站",
-      "category": "未分类",
+      "category": "教程类",
       "note": "真人出镜双手托举界面截图：左侧简历、右侧个人站；顶部弧形英文标题 Vibecoding，辅文案「详细教程」「0编程基础」",
       "tags": [
         "Vibecoding",
@@ -43,7 +47,7 @@
         "教程"
       ],
       "addedAt": "2026-11-05",
-      "path": "covers/未分类/20261105-Vibecoding零基础做简历和个人网站.png",
+      "path": "covers/教程类/20261105-Vibecoding零基础做简历和个人网站.png",
       "source": "对话入库"
     },
     {
