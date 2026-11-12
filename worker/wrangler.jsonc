@@ -1,0 +1,13 @@
+{
+  "name": "my-cover-library-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-06",
+  "account_id": "ce00a1a380022ab38d3673e1e84febe6",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
+  }
+}
