@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-13T09:20:50+08:00",
+  "updatedAt": "2026-11-13T09:21:10+08:00",
   "categories": [
     {
       "id": "未分类",
@@ -206,7 +206,7 @@
     {
       "id": "c014",
       "title": "Claude Code学会各种设计风格",
-      "category": "未分类",
+      "category": "教程分享",
       "note": "浅彩渐变底，主标题「Claude Code 学会各种设计风格」；上方 Agent Skill 胶囊标签，下方三张品牌网站截图（Meadow 居中）。",
       "tags": [
         "教程",
@@ -214,7 +214,7 @@
         "网站展示"
       ],
       "addedAt": "2026-11-12",
-      "path": "covers/未分类/20261112-ClaudeCode学会各种设计风格.jpg",
+      "path": "covers/教程分享/20261112-ClaudeCode学会各种设计风格.jpg",
       "source": "小红书收藏，作者搬砖的小Leo"
     },
     {
