@@ -8,7 +8,7 @@
 ## 结构
 
 ```
-index.html           浏览页面（读取 catalog.json：分类筛选、搜索、大图查看、调整分类）
+index.html           浏览页面（读取 catalog.json：分类筛选、搜索、大图查看、在大图里调整分类）
 worker/              保存分类变更的 Cloudflare Worker（口令与 GitHub token 只放在 Worker secret，不进仓库）
 catalog.json         索引：categories + covers
 covers/<分类>/YYYYMMDD-简短描述.<ext>   封面图片
@@ -34,7 +34,7 @@ scripts/add_cover.py 快捷入库（= manage.py add）
 
 ## 在网页上调整分类
 
-打开 https://crayon-ai.github.io/my-cover-library/ 后，可以点封面卡片或灯箱里的分类标签，把一张或一批封面移到已有分类，也可以自己输入名字新建分类。随机访客只能浏览；写回仓库需要口令，由 Cloudflare Worker 校验后再通过 GitHub API 更新 `catalog.json` 并移动图片文件、提交到 `main`。口令和仓库写入凭证只保存在 Worker secret，不会出现在前端或本仓库里。
+打开 https://crayon-ai.github.io/my-cover-library/ 后，点开一张封面，在大图详情里点分类标签，就能把它移到已有分类，也可以自己输入名字新建分类（手机上从底部弹出）。卡片上的分类标签只用来展示。随机访客只能浏览；写回仓库需要口令，由 Cloudflare Worker 校验后再通过 GitHub API 更新 `catalog.json` 并移动图片文件、提交到 `main`。口令和仓库写入凭证只保存在 Worker secret，不会出现在前端或本仓库里。
 
 ## 入库 / 管理流程
 

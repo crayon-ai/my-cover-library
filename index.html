@@ -63,13 +63,6 @@
   }
   .search:focus{border-color:var(--accent);}
   .count{font-size:12px; color:var(--muted); white-space:nowrap;}
-  .btn-org{
-    border:1px solid var(--line); background:var(--card); color:var(--ink);
-    font-size:13px; padding:5px 14px; border-radius:999px; cursor:pointer;
-    font-family:inherit; transition:all .15s ease;
-  }
-  .btn-org:hover{border-color:var(--accent); color:var(--accent);}
-  .btn-org.on{background:var(--accent); border-color:var(--accent); color:#fff;}
 
   .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:18px;}
   .card{
@@ -78,7 +71,6 @@
     transition:transform .18s ease, box-shadow .18s ease, border-color .15s ease;
   }
   .card:hover{transform:translateY(-3px); box-shadow:0 8px 24px rgba(17,17,17,.08);}
-  .card.selected{border-color:var(--accent); box-shadow:0 0 0 2px rgba(47,128,237,.28), 0 8px 24px rgba(17,17,17,.08); transform:none;}
   .thumb{aspect-ratio:3/4; width:100%; overflow:hidden; background:var(--soft); position:relative;}
   .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
   .card-body{padding:10px 12px 12px;}
@@ -91,23 +83,12 @@
     font-size:11.5px; color:var(--accent); background:var(--soft);
     border-radius:999px; padding:2px 10px; border:none; font-family:inherit; line-height:1.6;
   }
+  .chip.static{cursor:inherit;}
   .chip.editable{cursor:pointer; padding-right:8px; transition:background .15s ease;}
   .chip.editable:hover, .chip.editable[aria-expanded="true"]{background:#dce8ff;}
   .chip .chev{display:inline-flex; opacity:.65; margin-top:1px;}
   .empty{color:var(--muted); text-align:center; padding:64px 0; font-size:13.5px;}
 
-  .check{
-    position:absolute; top:10px; left:10px; z-index:3;
-    width:22px; height:22px; border-radius:50%;
-    border:2px solid #fff; background:rgba(255,255,255,.92);
-    box-shadow:0 1px 5px rgba(0,0,0,.28);
-    display:none; align-items:center; justify-content:center;
-    pointer-events:none;
-  }
-  body.organizing .check{display:flex;}
-  .card.selected .check{background:var(--accent); border-color:#fff;}
-  .check svg{display:none;}
-  .card.selected .check svg{display:block;}
 
   /* lightbox */
   .overlay{
@@ -194,33 +175,11 @@
     max-width:calc(100vw - 32px);
   }
   .toast.show{opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0);}
-  body.organizing .toast{bottom:92px;}
   .toast button{
     background:none; border:none; color:#8CB8FF; cursor:pointer;
     font-size:13px; font-family:inherit; font-weight:600; padding:0;
   }
 
-  /* batch bar */
-  .batch{
-    position:fixed; left:0; right:0; bottom:0; z-index:50;
-    background:rgba(255,255,255,.96); backdrop-filter:blur(8px);
-    border-top:1px solid var(--line);
-    padding:12px 24px;
-    display:none; align-items:center; gap:12px; flex-wrap:wrap;
-    box-shadow:0 -8px 24px rgba(17,17,17,.06);
-    justify-content:center;
-  }
-  body.organizing .batch{display:flex;}
-  .batch .n{font-weight:600; font-size:14px;}
-  .batch .muted{color:var(--muted); font-size:13px;}
-  .batch-pick{
-    display:inline-flex; align-items:center; gap:4px;
-    border:1px solid var(--line); background:#fff; color:var(--ink);
-    font-size:13px; padding:6px 14px; border-radius:999px; cursor:pointer;
-    font-family:inherit;
-  }
-  .batch-pick:hover{border-color:var(--accent); color:var(--accent);}
-  .batch-pick .lab{color:var(--muted); margin-right:2px;}
   .btn-primary{
     background:var(--accent); color:#fff; border:none; border-radius:999px;
     padding:6px 18px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit;
@@ -243,7 +202,7 @@
     .panel-info{padding:18px 16px;}
     #btnPrev{left:8px;} #btnNext{right:8px;}
     #btnPrev,#btnNext{background:rgba(255,255,255,.9);}
-    .batch{padding:12px 16px; justify-content:flex-start;}
+
     .menu.open.sheet{
       left:0 !important; right:0 !important; top:auto !important;
       width:100%; min-width:0; max-height:70vh; overflow:auto;
@@ -251,7 +210,10 @@
       padding:8px 12px 20px;
       box-shadow:0 -10px 32px rgba(17,17,17,.14);
     }
-    body.organizing .menu.open.sheet{/* bottom set in JS to the batch bar height */}
+
+    .menu.sheet .menu-form input{font-size:16px; padding:9px 12px; min-height:42px;}
+    .menu.sheet .menu-form button{font-size:15px; min-height:42px; padding:8px 16px;}
+    .menu.sheet .menu-item{padding:11px 10px; font-size:15px;}
     .sheet-head{
       display:block; text-align:center; font-size:13px; font-weight:600;
       color:var(--muted); padding:6px 0 10px; letter-spacing:.02em;
@@ -300,7 +262,6 @@
   <div class="toolbar">
     <div class="tabs" id="tabs"></div>
     <input class="search" id="search" type="search" placeholder="搜索标题 / 笔记 / 标签 / 来源…" aria-label="搜索">
-    <button class="btn-org" id="btnOrg" type="button">整理分类</button>
     <span class="count" id="count"></span>
   </div>
 
@@ -333,17 +294,6 @@
 <div class="menu" id="menu" role="listbox"></div>
 <div class="toast" id="toast"><span id="toastMsg"></span><button type="button" id="toastUndo">撤销</button></div>
 
-<div class="batch" id="batch">
-  <span class="n" id="batchCount">已选 0 张</span>
-  <button class="batch-pick" id="batchPick" type="button">
-    <span class="lab">移至</span>
-    <span id="batchCat">选择分类</span>
-    <span class="chev" aria-hidden="true"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1.5 1.5L5 4.5L8.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-  </button>
-  <button class="btn-primary" id="batchMove" type="button" disabled>移动</button>
-  <button class="btn-ghost" id="batchAll" type="button">全选</button>
-  <button class="btn-ghost" id="batchClear" type="button">取消</button>
-</div>
 
 
 <div class="pwd-overlay" id="pwdOverlay">
@@ -379,7 +329,7 @@
   var categories = [];
   var knownCats = {};
   var sessionPassword = "";
-  var state = { cat:"全部", q:"", idx:-1, organizing:false, selected:{}, batchTarget:"" };
+  var state = { cat:"全部", q:"", idx:-1 };
   var currentList = [];
   var history = [];
   var toastTimer = null;
@@ -410,10 +360,6 @@
     var reverse = s.reverse || [];
     covers = s.covers;
     categories = s.categories;
-    state.selected = {};
-    state.batchTarget = "";
-    document.getElementById("batchCat").textContent = "选择分类";
-    document.getElementById("batchMove").disabled = true;
     buildTabs();
     render();
     if (overlay.classList.contains("open") && state.idx >= 0) fill();
@@ -528,14 +474,11 @@
     grid.innerHTML = "";
     list.forEach(function(c){
       var card = document.createElement("div");
-      card.className = "card" + (state.selected[c.id] ? " selected" : "");
+      card.className = "card";
       card.setAttribute("data-id", c.id);
 
       var thumb = document.createElement("div");
       thumb.className = "thumb";
-      var chk = document.createElement("div");
-      chk.className = "check";
-      chk.innerHTML = tickSvg();
       var real = document.createElement("img");
       real.loading = "lazy"; real.alt = c.title || "";
       real.src = imgSrc(c.path);
@@ -545,107 +488,28 @@
           real.src = imgSrc(c._pendingPath);
         }
       });
-      thumb.appendChild(chk);
       thumb.appendChild(real);
 
       var body = document.createElement("div");
       body.className = "card-body";
       var t = document.createElement("div");
       t.className = "card-title"; t.textContent = c.title || c.id;
-      var chip = document.createElement("button");
-      chip.className = "chip editable";
-      chip.type = "button";
-      chip.setAttribute("aria-label", "更改分类：" + (c.category||"未分类"));
-      chip.innerHTML = "<span></span>" + chevron();
-      chip.querySelector("span").textContent = c.category || "未分类";
-      chip.addEventListener("click", function(e){
-        e.stopPropagation();
-        openCatMenu(chip, {
-          current: c.category,
-          fromChip: true,
-          ids: [c.id],
-          onPick: function(name){ applyMove([c.id], name); }
-        });
-      });
+      var chip = document.createElement("span");
+      chip.className = "chip static";
+      chip.textContent = c.category || "未分类";
       body.appendChild(t); body.appendChild(chip);
       card.appendChild(thumb); card.appendChild(body);
 
-      card.addEventListener("click", function(){
-        if (state.organizing){
-          toggleSelect(c.id);
-        } else {
-          openLightbox(c.id, list);
-        }
-      });
+      card.addEventListener("click", function(){ openLightbox(c.id, list); });
       grid.appendChild(card);
     });
     document.getElementById("empty").hidden = list.length > 0;
     document.getElementById("count").textContent = "共 " + list.length + " 张";
     markActive();
-    updateBatch();
   }
 
   document.getElementById("search").addEventListener("input", function(e){
     state.q = e.target.value;
-    render();
-  });
-
-  /* organize + batch */
-  function toggleOrganize(on){
-    state.organizing = on !== undefined ? on : !state.organizing;
-    document.body.classList.toggle("organizing", state.organizing);
-    document.getElementById("btnOrg").classList.toggle("on", state.organizing);
-    document.getElementById("btnOrg").textContent = state.organizing ? "完成整理" : "整理分类";
-    hideToast();
-    if (!state.organizing){
-      state.selected = {};
-      state.batchTarget = "";
-      document.getElementById("batchCat").textContent = "选择分类";
-      document.getElementById("batchMove").disabled = true;
-    }
-    closeMenu();
-    render();
-  }
-  document.getElementById("btnOrg").addEventListener("click", function(){ toggleOrganize(); });
-
-  function toggleSelect(id){
-    if (state.selected[id]) delete state.selected[id];
-    else state.selected[id] = true;
-    var card = document.querySelector('.card[data-id="'+id+'"]');
-    if (card) card.classList.toggle("selected", !!state.selected[id]);
-    updateBatch();
-  }
-  function selectedIds(){ return Object.keys(state.selected); }
-  function updateBatch(){
-    var n = selectedIds().length;
-    document.getElementById("batchCount").textContent = "已选 " + n + " 张";
-    document.getElementById("batchMove").disabled = !(n > 0 && state.batchTarget);
-  }
-  document.getElementById("batchClear").addEventListener("click", function(){
-    state.selected = {};
-    render();
-  });
-  document.getElementById("batchAll").addEventListener("click", function(){
-    filtered().forEach(function(c){ state.selected[c.id] = true; });
-    render();
-  });
-  document.getElementById("batchPick").addEventListener("click", function(e){
-    e.stopPropagation();
-    openCatMenu(document.getElementById("batchPick"), {
-      current: state.batchTarget,
-      picking: true,
-      onPick: function(name){
-        state.batchTarget = name;
-        document.getElementById("batchCat").textContent = name;
-        updateBatch();
-      }
-    });
-  });
-  document.getElementById("batchMove").addEventListener("click", function(){
-    var ids = selectedIds();
-    if (!ids.length || !state.batchTarget) return;
-    applyMove(ids, state.batchTarget);
-    state.selected = {};
     render();
   });
 
@@ -660,7 +524,11 @@
       return;
     }
     ensurePassword().then(function(password){
-      if (!password) return;
+      if (!password){
+        // 取消口令：刚新建但没保存的分类一并撤回
+        if (createdNow) dropNewCategory(newCat);
+        return;
+      }
       snapshot();
       var changed = moveCovers(ids, newCat);
       var rec = history[history.length - 1];
@@ -683,6 +551,7 @@
             render();
             if (overlay.classList.contains("open") && state.idx >= 0) fill();
           }
+          if (createdNow) dropNewCategory(newCat);
           showToast("保存失败，请重试", false);
           forgetPassword();
           return;
@@ -703,6 +572,17 @@
         }
       });
     });
+  }
+
+  function dropNewCategory(name){
+    if (knownCats[name]) return;
+    if (covers.some(function(c){ return c.category === name; })) return;
+    categories = categories.filter(function(c){ return c.name !== name; });
+    // 去掉 confirmNew 为新建分类压入的那一步历史
+    var last = history[history.length - 1];
+    if (last && !last.reverse) history.pop();
+    buildTabs();
+    render();
   }
 
   function readStoredPassword(){
@@ -859,16 +739,9 @@
       categories.push({id:name, name:name});
       buildTabs();
     }
-    var picking = menuCtx && menuCtx.picking;
-    var pick = menuCtx && menuCtx.onPick;
     var ctx = menuCtx;
     closeMenu();
-    if (pick){
-      if (ctx && ctx.fromChip) applyMove(ctx.ids, name, !existed);
-      else pick(name);
-    }
-    // 直接改某张封面时，移动的 toast 即可；只是在「移至」里新建分类时，再提示新建。
-    if (!existed && picking) showToast("已新建分类「" + name + "」", true);
+    if (ctx && ctx.ids) applyMove(ctx.ids, name, !existed);
   }
 
   function positionMenu(anchor){
@@ -881,12 +754,7 @@
       menu.style.right = "0px";
       menu.style.top = "auto";
       menu.style.width = "100%";
-      var bar = document.getElementById("batch");
-      var extra = 0;
-      if (document.body.classList.contains("organizing") && bar){
-        extra = Math.ceil(bar.getBoundingClientRect().height);
-      }
-      menu.style.bottom = extra + "px";
+      menu.style.bottom = keyboardInset() + "px";
       menu.style.visibility = "visible";
       return;
     }
@@ -906,6 +774,25 @@
     menu.style.left = left + "px";
     menu.style.top = top + "px";
     menu.style.visibility = "visible";
+  }
+
+  function keyboardInset(){
+    var vv = window.visualViewport;
+    if (!vv) return 0;
+    return Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop));
+  }
+  function onViewportChange(){
+    if (menu.classList.contains("open") && menu.classList.contains("sheet")){
+      menu.style.bottom = keyboardInset() + "px";
+      var inp = document.getElementById("menuInput");
+      if (inp && document.activeElement === inp && inp.scrollIntoView){
+        inp.scrollIntoView({ block: "nearest" });
+      }
+    }
+  }
+  if (window.visualViewport){
+    window.visualViewport.addEventListener("resize", onViewportChange);
+    window.visualViewport.addEventListener("scroll", onViewportChange);
   }
 
   function closeMenu(){
@@ -929,8 +816,20 @@
     if (menu.contains(e.target)) return;
     closeMenu();
   });
-  window.addEventListener("resize", function(){ if (menu.classList.contains("open") && menu._anchor) positionMenu(menu._anchor); });
-  window.addEventListener("scroll", function(){ if (menu.classList.contains("open")) closeMenu(); }, true);
+  window.addEventListener("resize", function(){
+    if (!menu.classList.contains("open") || !menu._anchor) return;
+    if (menu.classList.contains("sheet")){ onViewportChange(); return; }
+    positionMenu(menu._anchor);
+  });
+  window.addEventListener("scroll", function(e){
+    if (!menu.classList.contains("open")) return;
+    // 手机底部弹出、菜单内滚动、输入框有焦点时都不要关：键盘弹出和 iOS 自动滚动会触发 scroll，
+    // 以前这里直接关菜单，把「新建分类」输入框一起移除，导致手机上无法输入。
+    if (menu.classList.contains("sheet")) return;
+    if (e.target && e.target.nodeType === 1 && menu.contains(e.target)) return;
+    if (menu.contains(document.activeElement)) return;
+    closeMenu();
+  }, true);
 
   /* lightbox */
   function openLightbox(id, list){
